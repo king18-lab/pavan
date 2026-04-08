@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Sign Up</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 950px;
+      min-height: 620px;
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .left-panel h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+    }
+
+    .left-panel p {
+      font-size: 1rem;
+      line-height: 1.8;
+      max-width: 320px;
+      opacity: 0.95;
+    }
+
+    .form-panel {
+      flex: 1;
+      padding: 45px 35px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      padding: 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #475569;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .form-box {
+      display: none;
+      animation: fade 0.4s ease;
+    }
+
+    .form-box.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      color: #0f172a;
+      margin-bottom: 25px;
+      font-size: 2rem;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .message {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .success {
+      color: #16a34a;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        flex-direction: column;
+        max-width: 500px;
+      }
+
+      .left-panel {
+        padding: 35px 25px;
+      }
+
+      .left-panel h1 {
+        font-size: 2rem;
+      }
+
+      .form-panel {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Welcome Back</h1>
+      <p>Create your account or login using the same page. Your sign up data will be stored in browser local storage as JSON.</p>
+    </div>
+
+    <div class="form-panel">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showForm('signup')">Sign Up</button>
+        <button class="tab-btn" onclick="showForm('login')">Login</button>
+      </div>
+
+      <div id="signup" class="form-box active">
+        <h2>Create Account</h2>
+
+        <div class="input-group">
+          <input type="text" id="signupName" placeholder="Full Name" required>
+        </div>
+
+        <div class="input-group">
+          <input type="tel" id="signupNumber" placeholder="Phone Number" maxlength="10" required>
+        </div>
+
+        <div class="input-group">
+          <input type="email" id="signupEmail" placeholder="Email Address" required>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="signupPassword" placeholder="Password" required>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="signupConfirm" placeholder="Confirm Password" required>
+        </div>
+
+        <button class="submit-btn" onclick="signupUser()">Sign Up</button>
+        <div id="signupMessage" class="message"></div>
+      </div>
+
+      <div id="login" class="form-box">
+        <h2>Login</h2>
+
+        <div class="input-group">
+          <input type="email" id="loginEmail" placeholder="Email Address" required>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="loginPassword" placeholder="Password" required>
+        </div>
+
+        <button class="submit-btn" onclick="loginUser()">Login</button>
+        <div id="loginMessage" class="message"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showForm(type) {
+      const signup = document.getElementById('signup');
+      const login = document.getElementById('login');
+      const buttons = document.querySelectorAll('.tab-btn');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      if (type === 'signup') {
+        signup.classList.add('active');
+        login.classList.remove('active');
+        buttons[0].classList.add('active');
+      } else {
+        login.classList.add('active');
+        signup.classList.remove('active');
+        buttons[1].classList.add('active');
+      }
+    }
+
+    function signupUser() {
+      const name = document.getElementById('signupName').value.trim();
+      const number = document.getElementById('signupNumber').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirm = document.getElementById('signupConfirm').value;
+      const message = document.getElementById('signupMessage');
+
+      if (!name || !number || !email || !password || !confirm) {
+        message.className = 'message error';
+        message.textContent = 'Please fill all fields.';
+        return;
+      }
+
+      if (!/^\d{10}$/.test(number)) {
+        message.className = 'message error';
+        message.textContent = 'Phone number must be 10 digits.';
+        return;
+      }
+
+      if (password !== confirm) {
+        message.className = 'message error';
+        message.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      const userData = {
+        name: name,
+        number: number,
+        email: email,
+        password: password
+      };
+
+      localStorage.setItem('userData', JSON.stringify(userData));
+
+      message.className = 'message success';
+      message.textContent = 'Account created successfully! Data saved in local storage.';
+
+      document.getElementById('signupName').value = '';
+      document.getElementById('signupNumber').value = '';
+      document.getElementById('signupEmail').value = '';
+      document.getElementById('signupPassword').value = '';
+      document.getElementById('signupConfirm').value = '';
+
+      setTimeout(() => {
+        showForm('login');
+      }, 1200);
+    }
+
+    function loginUser() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const message = document.getElementById('loginMessage');
+
+      const savedUser = JSON.parse(localStorage.getItem('userData'));
+
+      if (!savedUser) {
+        message.className = 'message error';
+        message.textContent = 'No account found. Please sign up first.';
+        return;
+      }
+
+      if (email === savedUser.email && password === savedUser.password) {
+        message.className = 'message success';
+        message.textContent = 'Login successful! Welcome, ' + savedUser.name + '.';
+      } else {
+        message.className = 'message error';
+        message.textContent = 'Invalid email or password.';
+      }
+    }
+  </script>
+</body>
+</html>
